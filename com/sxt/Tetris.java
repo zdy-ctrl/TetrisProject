@@ -6,11 +6,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
+/**
+ * @author 18124
+ */
+@SuppressWarnings("AlibabaCommentsMustBeJavadocFormat")
 public class Tetris extends JFrame implements KeyListener {
-    //游戏的行数26，列数12
-    private static final int game_x = 26;
-    private static final int game_y = 12;
-    //文本域数组
+    /**
+     * 游戏的行数26，列数12
+     */
+    private static final int GAME_X = 26;
+    private static final int GAME_Y = 12;
+    /**
+     * 文本域数组
+     */
     JTextArea[][] text;
     //二位数组 1代表方块 0代表空白区域
     int[][] data;
@@ -31,17 +39,19 @@ public class Tetris extends JFrame implements KeyListener {
     //计算得分
     int score = 0;
     //定义一个标志变量，用于判断游戏是否暂停
-    boolean game_pause = false;
+    boolean gamePause = false;
     //定义一个变量用于记录按下暂停将的次数
-    int pause_times = 0;
+    int pauseTimes = 0;
 
 
-    //空参构造
+    /**
+     * 空参构造
+     */
     public Tetris() {
         //调用初始化方法
         //初始化参数
-        text = new JTextArea[game_x][game_y];
-        data = new int[game_x][game_y];
+        text = new JTextArea[GAME_X][GAME_Y];
+        data = new int[GAME_X][GAME_Y];
         //初始化表示游戏状态的标签
         label1 = new JLabel("游戏状态：正在游戏中！");
         //初始化表示游戏分数的标签
@@ -57,11 +67,13 @@ public class Tetris extends JFrame implements KeyListener {
 
     public static void main(String[] args) {
         Tetris tetris = new Tetris();
-        tetris.game_begin();
+        tetris.gameBegin();
     }
 
 
-    //初始化窗体
+    /**
+     * 初始化窗体
+     */
     public void initWindows() {
         //设置窗口大小
         this.setSize(600, 850);
@@ -78,16 +90,18 @@ public class Tetris extends JFrame implements KeyListener {
     }
 
 
-    //初始化游戏界面
+    /**
+     * 初始化游戏界面
+     */
     public void initGamePanel() {
-        JPanel game_main = new JPanel();
+        JPanel gameMain = new JPanel();
         //网格布局
-        game_main.setLayout(new GridLayout(game_x, game_y, 1, 1));
+        gameMain.setLayout(new GridLayout(GAME_X, GAME_Y, 1, 1));
         //初始化面板
         for (int i = 0; i < text.length; i++) {
             for (int j = 0; j < text[i].length; j++) {
                 //设置文本域的行数
-                text[i][j] = new JTextArea(game_x, game_y);
+                text[i][j] = new JTextArea(GAME_X, GAME_Y);
                 //设置文本域的背景颜色
                 text[i][j].setBackground(Color.white);
                 //添加键盘监听事件
@@ -95,71 +109,78 @@ public class Tetris extends JFrame implements KeyListener {
                 //初始化游戏界面
                 if (j == 0 || j == text[i].length - 1 || i == text.length - 1) {
                     text[i][j].setBackground(Color.gray);
-                    data[i][j] = 1;  //这里有方块
+                    data[i][j] = 1;
+                    //这里有方块
                 }
                 //设置文本区域不可编辑
                 text[i][j].setEditable(false);
                 //文本区域添加到主面板上
-                game_main.add(text[i][j]);
+                gameMain.add(text[i][j]);
             }
         }
         //添加到窗口中
         this.setLayout(new BorderLayout());
         //添加窗口的中间位置
-        this.add(game_main, BorderLayout.CENTER);
+        this.add(gameMain, BorderLayout.CENTER);
     }
 
 
-    //初始化游戏的说明面板
+    /**
+     * 初始化游戏的说明面板
+     */
     public void initExplainPanel() {
         //创建游戏的左说明面板
-        JPanel explain_left = new JPanel();
-        explain_left.setLayout(new GridLayout(4, 1));
+        JPanel explainLeft = new JPanel();
+        explainLeft.setLayout(new GridLayout(4, 1));
         //创建游戏的右说明面板
-        JPanel explain_right = new JPanel();
-        explain_right.setLayout(new GridLayout(2, 1));
+        JPanel explainRight = new JPanel();
+        explainRight.setLayout(new GridLayout(2, 1));
         //初始化左说明面板
         //在左说明面板添加说明文字
-        explain_left.add(new JLabel("按空格键，方块变形"));
-        explain_left.add(new JLabel("按左箭头，方块左移"));
-        explain_left.add(new JLabel("按右箭头，方块右移"));
-        explain_left.add(new JLabel("按下箭头，方块下落"));
+        explainLeft.add(new JLabel("按空格键，方块变形"));
+        explainLeft.add(new JLabel("按左箭头，方块左移"));
+        explainLeft.add(new JLabel("按右箭头，方块右移"));
+        explainLeft.add(new JLabel("按下箭头，方块下落"));
         //设置标签的内容为红色字体
         label1.setForeground(Color.RED);
         //把游戏的状态标签，游戏分数标签，添加到右说明面板
-        explain_right.add(label1);
-        explain_right.add(label2);
+        explainRight.add(label1);
+        explainRight.add(label2);
         //将左说明面板添加到窗口的左侧
-        this.add(explain_left, BorderLayout.WEST);
+        this.add(explainLeft, BorderLayout.WEST);
         //将右说明面板添加到窗口的右侧
-        this.add(explain_right, BorderLayout.EAST);
+        this.add(explainRight, BorderLayout.EAST);
     }
 
 
-    //开始游戏的方法
-    public void game_begin() {
+    /**
+     * 开始游戏的方法
+     */
+    public void gameBegin() {
         while (true) {
             //用于判断游戏是否结束
             if (!isRunning) {
                 break;
             }
             //进行游戏
-            game_run();
+            gameRun();
         }
         //在标签位置显示”游戏结束“
         label1.setText("游戏状态：游戏结束！");
     }
 
-    //游戏运行的方法
-    public void game_run() {
+    /**
+     * 游戏运行的方法
+     */
+    public void gameRun() {
         ranRect();
         //方块下落位置
         x = 0;
         y = 5;
-        for (int i = 0; i < game_x; i++) {
+        for (int i = 0; i < GAME_X; i++) {
             try {
                 Thread.sleep(time);
-                if (game_pause) {
+                if (gamePause) {
                     i--;
                 } else {
                     //判断方块是否可以下落
@@ -169,19 +190,19 @@ public class Tetris extends JFrame implements KeyListener {
                         //循环遍历4层，看是否有行可以消除
                         for (int j = x; j < x + 4; j++) {
                             int sum = 0;
-                            for (int k = 1; k <= (game_y - 2); k++) {
+                            for (int k = 1; k <= (GAME_Y - 2); k++) {
                                 if (data[j][k] == 1) {
                                     sum++;
                                 }
                             }
                             //判断是否有一行可以被消除
-                            if (sum == (game_y - 2)) {
+                            if (sum == (GAME_Y - 2)) {
                                 //消除j这一行
                                 removeRow(j);
                             }
                         }
                         //判断游戏是否失败
-                        for (int j = 1; j <= (game_y - 2); j++) {
+                        for (int j = 1; j <= (GAME_Y - 2); j++) {
                             if (data[3][j] == 1) {
                                 isRunning = false;
                                 break;
@@ -249,7 +270,7 @@ public class Tetris extends JFrame implements KeyListener {
     public void removeRow(int row) {
         int temp = 100;
         for (int i = row; i >=1; i--) {
-            for (int j = 1; j <= (game_y - 2); j++) {
+            for (int j = 1; j <= (GAME_Y- 2); j++) {
                 //进行覆盖
                 data[i][j] = data[i-1][j];
             }
@@ -264,7 +285,9 @@ public class Tetris extends JFrame implements KeyListener {
         //显示变化后的分数
         label2.setText("游戏的得分：" + score);
     }
-    //随机生成下落方块形状的方法
+    /**
+     * 随机生成下落方块形状的方法
+     */
     public void ranRect() {
         Random random = new Random();
         rect = allRect[random.nextInt(22)];
@@ -275,7 +298,7 @@ public class Tetris extends JFrame implements KeyListener {
     public void refresh(int row) {
         //遍历row行以上的游戏区域
         for (int i = row; i >= 1; i--) {
-            for (int j = 1; j <= (game_y - 2); j++) {
+            for (int j = 1; j <= (GAME_Y - 2); j++) {
                 if (data[i][j] == 1) {
                     text[i][j].setBackground(Color.BLACK);
                 } else {
@@ -340,16 +363,16 @@ public class Tetris extends JFrame implements KeyListener {
             if (!isRunning) {
                 return;
             }
-            pause_times++;
+            pauseTimes++;
             //判断按下一次，暂停游戏
-            if (pause_times == 1) {
-                game_pause = true;
+            if (pauseTimes == 1) {
+                gamePause = true;
                 label1.setText("游戏状态：暂停中！");
             }
             //判断按下两次，暂停游戏
-            if (pause_times == 2) {
-                game_pause = false;
-                pause_times = 0;
+            if (pauseTimes == 2) {
+                gamePause = false;
+                pauseTimes = 0;
                 label1.setText("游戏状态：正在进行中！");
             }
         }
@@ -360,7 +383,7 @@ public class Tetris extends JFrame implements KeyListener {
                 return;
             }
             //判断游戏是否暂停
-            if (game_pause) {
+            if (gamePause) {
                 return;
             }
             //定义变量，存储目前方块的索引
@@ -373,12 +396,10 @@ public class Tetris extends JFrame implements KeyListener {
             }
             //定义一个变量，存储变形后的方块
             int next;
-
             //判断是方块
             if (old == 0 || old == 7 || old == 8 || old == 9) {
                 return;
             }
-
             //清除当前方块
             clear(x, y);
             //变形的过程
@@ -460,7 +481,7 @@ public class Tetris extends JFrame implements KeyListener {
                 return;
             }
             //判断游戏是否暂停
-            if (game_pause) {
+            if (gamePause) {
                 return;
             }
             //方块是否碰到左墙壁
@@ -484,7 +505,6 @@ public class Tetris extends JFrame implements KeyListener {
             y--;
             draw(x, y);
         }
-
         //控制方块的右移（右箭头对应的数值为39）
         if (e.getKeyCode() == 39) {
             //判断游戏是否结束
@@ -492,7 +512,7 @@ public class Tetris extends JFrame implements KeyListener {
                 return;
             }
             //判断游戏是否暂停
-            if (game_pause) {
+            if (gamePause) {
                 return;
             }
             //方块是否碰到左墙壁
@@ -514,9 +534,8 @@ public class Tetris extends JFrame implements KeyListener {
                 m++;
                 n = n - 4;
             }
-
             //判断是否碰到右墙壁
-            if (num >= (game_y - 2)) {
+            if (num >= (GAME_Y - 2)) {
                 return;
             }
             //方块是否碰到其他方块
@@ -536,7 +555,6 @@ public class Tetris extends JFrame implements KeyListener {
             y++;
             draw(x, y);
         }
-
         //控制方块下落（下箭头对应的数值为40）
         if (e.getKeyCode() == 40) {
             //判断游戏是否结束
@@ -544,7 +562,7 @@ public class Tetris extends JFrame implements KeyListener {
                 return;
             }
             //判断游戏是否暂停
-            if (game_pause) {
+            if (gamePause) {
                 return;
             }
             //判断方块是否可以下落
